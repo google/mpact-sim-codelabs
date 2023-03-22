@@ -1,0 +1,178 @@
+// This file contains the ISA description for the RiscV32G architecture.
+
+isa RiscV32I {
+  namespace mpact::sim::codelab;
+  slots { riscv32; }
+}
+
+// The RiscV 'I' instructions.
+slot riscv32i {
+  // Include file that contains the declarations of the semantic functions for
+  // the 'I' instructions.
+  includes {
+    #include "riscv_semantic_functions/solution/rv32i_instructions.h"
+  }
+  // These are all 32 bit instructions, so set default size to 4.
+  default size = 4;
+  // Model these with 0 latency to avoid buffering the result. Since RiscV
+  // instructions have sequential semantics this is fine.
+  default latency = 0;
+  // The opcodes.
+  opcodes {
+    // Exercise 2, Add Register-Register ALU Instructions.
+    add{ : rs1, rs2 : rd},
+      semfunc: "&RV32IAdd",
+      disasm: "add", "%rd, %rs1, %rs2";
+    and{ : rs1, rs2 : rd},
+      semfunc: "&RV32IAnd",
+      disasm: "and", "%rd, %rs1, %rs2";
+    or{ : rs1, rs2 : rd},
+      semfunc: "&RV32IOr",
+      disasm: "or", "%rd, %rs1, %rs2";
+    sll{ : rs1, rs2 : rd},
+      semfunc: "&RV32ISll",
+      disasm: "sll", "%rd, %rs1, %rs2";
+    sltu{ : rs1, rs2 : rd},
+      semfunc: "&RV32ISltu",
+      disasm: "sltu", "%rd, %rs1, %rs2";
+    sub{ : rs1, rs2 : rd},
+      semfunc: "&RV32ISub",
+      disasm: "sub", "%rd, %rs1, %rs2";
+    xor{ : rs1, rs2 : rd},
+      semfunc: "&RV32IXor",
+      disasm: "xor", "%rd, %rs1, %rs2";
+
+    // Exercise 3, Add ALU Instructions with Immediates.
+    // I-Type.
+    addi{ : rs1, imm12 : rd},
+      semfunc: "&RV32IAdd",
+      disasm: "addi", "%rd, %rs1, %imm12";
+    andi{ : rs1, imm12 : rd},
+      semfunc: "&RV32IAnd",
+      disasm: "andi", "%rd, %rs1, %imm12";
+    ori{ : rs1, imm12 : rd},
+      semfunc: "&RV32IOr",
+      disasm: "ori", "%rd, %rs1, %imm12";
+    xori{ : rs1, imm12 : rd},
+      semfunc: "&RV32IXor",
+      disasm: "xori", "%rd, %rs1, %imm12";
+
+    // Specialized I-Type.
+    slli{ : rs1, uimm5 : rd},
+      semfunc: "&RV32ISll",
+      disasm: "slli", "%rd, %rs1, %uimm5";
+    srai{ : rs1, uimm5 : rd},
+      semfunc: "&RV32ISra",
+      disasm: "srai", "%rd, %rs1, %uimm5";
+    srli{ : rs1, uimm5 : rd},
+      semfunc: "&RV32ISrl",
+      disasm: "srli", "%rd, %rs1, %uimm5";
+
+    // U-Type.
+    auipc{ : uimm20 : rd},
+      semfunc: "&RV32IAuipc",
+      disasm: "auipc", "%rd, %uimm20";
+    lui{ : uimm20 : rd},
+      semfunc: "&RV32ILui",
+      disasm: "lui", "%rd, %uimm20";
+
+    // Exercise 4, Add Branch and Jump-And-Link Instructions.
+    // Branches
+    beq{ : rs1, rs2, bimm12 : next_pc},
+      semfunc: "&RV32IBeq",
+      disasm: "beq", "%rs1, %rs2, %(@+bimm12:08x)";
+    bge{ : rs1, rs2, bimm12 : next_pc},
+      semfunc: "&RV32IBge",
+      disasm: "bge", "%rs1, %rs2, %(@+bimm12:08x)";
+    bgeu{ : rs1, rs2, bimm12 : next_pc},
+      semfunc: "&RV32IBgeu",
+      disasm: "bgeu", "%rs1, %rs2, %(@+bimm12:08x)";
+    blt{ : rs1, rs2, bimm12 : next_pc},
+      semfunc: "&RV32IBlt",
+      disasm: "blt", "%rs1, %rs2, %(@+bimm12:08x)";
+    bltu{ : rs1, rs2, bimm12 : next_pc},
+      semfunc: "&RV32IBltu",
+      disasm: "bltu", "%rs1, %rs2, %(@+bimm12:08x)";
+    bne{ : rs1, rs2, bimm12 : next_pc},
+      semfunc: "&RV32IBne",
+      disasm: "bne", "%rs1, %rs2, %(@+bimm12:08x)";
+
+    // Jumps
+    jal{ : jimm20 : next_pc, rd},
+      semfunc: "&RV32IJal",
+      disasm: "jal", "%rd, %(@+jimm20:08x)";
+    jalr{ : rs1, imm12 : next_pc, rd},
+      semfunc: "&RV32IJalr",
+      disasm: "jalr", "%rd, %rs1, %imm12";
+
+    // Exercise 5, Add Store Instructions.
+    sb{ : rs1, simm12, rs2},
+      semfunc: "&RV32ISb",
+      disasm: "sb", "%rs2, %simm12(%rs1)";
+    sh{ : rs1, simm12, rs2},
+      semfunc: "&RV32ISh",
+      disasm: "sh", "%rs2, %simm12(%rs1)";
+    sw{ : rs1, simm12, rs2},
+      semfunc: "&RV32ISw",
+      disasm: "sw", "%rs2, %simm12(%rs1)";
+
+    // Exercise 6, Add Load Instructions.
+    lb{( : rs1, imm12 : ), ( : : rd)},
+      semfunc: "&RV32ILb", "&RV32ILbChild",
+      disasm: "lb", "%rd, %imm12(%rs1)";
+    lbu{( : rs1, imm12 : ), ( : : rd)},
+      semfunc: "&RV32ILbu", "&RV32ILbuChild",
+      disasm: "lbu", "%rd, %imm12(%rs1)";
+    lh{( : rs1, imm12 : ), ( : : rd)},
+      semfunc: "&RV32ILh", "&RV32ILhChild",
+      disasm: "lh", "%rd, %imm12(%rs1)";
+    lhu{( : rs1, imm12 : ), ( : : rd)},
+      semfunc: "&RV32ILhu", "&RV32ILhuChild",
+      disasm: "lhu", "%rd, %imm12(%rs1)";
+    lw{( : rs1, imm12 : ), ( : : rd)},
+      semfunc: "&RV32ILw", "&RV32ILwChild",
+      disasm: "lw", "%rd, %imm12(%rs1)";
+
+    // End of Excercises.
+
+    fence{: imm12 : },
+      semfunc: "&RV32IFence",
+      disasm: "fence";
+    ebreak{},
+      semfunc: "&RV32IEbreak",
+      disasm: "ebreak";
+  }
+}
+
+// RiscV32 CSR manipulation instructions.
+slot zicsr {
+  // Include file that contains the declarations of the semantic functions for
+  // the 'zicsr' instructions.
+  includes {
+    #include "riscv_semantic_functions/solution/zicsr_instructions.h"
+  }
+  // 32 bit instructions.
+  default size = 4;
+  // No buffering of the result.
+  default latency = 0;
+  // Instructions.
+  opcodes {
+    csrs{: rs1, csr : rd, csr},
+      semfunc: "&RV32ZiCsrs",
+      disasm: "csrs", "%csr, %rs1";
+    csrw_nr{: rs1 : csr},
+      semfunc: "&RV32ZiCsrwNr",  // rd == 0 (x0).
+      disasm: "csrw", "%csr, %rs1";
+    csrs_nw{: csr : rd, csr},
+      semfunc: "&RV32ZiCsrsNw",  // rs1 == 0 (x0).
+      disasm: "csrs", "%csr, %rd";
+  }
+}
+
+// The final instruction set combines riscv32i and zicsr.
+slot riscv32 : riscv32i, zicsr {
+  // Default opcode for any instruction not matched by the decoder.
+  default opcode =
+    disasm: "Illegal instruction at 0x%(@:08x)",
+    semfunc: "&RV32IllegalInstruction";
+}

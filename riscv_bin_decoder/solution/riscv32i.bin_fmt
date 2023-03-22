@@ -1,0 +1,168 @@
+// This declares the decoder.
+decoder RiscV32I {
+  // The namespace in which code will be generated.
+  namespace mpact::sim::codelab;
+  // The name (including any namespace qualifiers) of the opcode enum type.
+  opcode_enum = "OpcodeEnum";
+  // Include files specific to this decoder.
+  includes {
+    #include "riscv_isa_decoder/solution/riscv32i_decoder.h"
+  }
+  // Instruction groups for which to generate decode functions.
+  RiscVInst32;
+};
+
+// The generic RiscV 32 bit instruction format.
+format Inst32Format[32] {
+  fields:
+    unsigned bits[25];
+    unsigned opcode[7];
+};
+
+// Exercise 2 format.
+format RType[32] : Inst32Format {
+  fields:
+    unsigned func7[7];
+    unsigned rs2[5];
+    unsigned rs1[5];
+    unsigned func3[3];
+    unsigned rd[5];
+    unsigned opcode[7];
+  overlays:
+    unsigned uimm5[5] = rs2;   // Exercise 3.
+};
+// End of Exercise 2 format.
+
+// RiscV 32 bit instruction format used by a number of instructions
+// needing a 12 bit immediate, including CSR instructions.
+format IType[32] : Inst32Format {
+  fields:
+    signed imm12[12];
+    unsigned rs1[5];
+    unsigned func3[3];
+    unsigned rd[5];
+    unsigned opcode[7];
+};
+
+// Exercise 3 format.
+format UType[32] : Inst32Format {
+  fields:
+    unsigned uimm20[20];
+    unsigned rd[5];
+    unsigned opcode[7];
+  overlays:
+    unsigned uimm32[32] = uimm20, 0b0000'0000'0000;
+};
+// End of Exercise 3 format.
+
+// Exercise 4 formats.
+format BType[32] : Inst32Format {
+  fields:
+    unsigned imm7[7];
+    unsigned rs2[5];
+    unsigned rs1[5];
+    unsigned func3[3];
+    unsigned imm5[5];
+    unsigned opcode[7];
+  overlays:
+    signed b_imm[13] = imm7[6], imm5[0], imm7[5..0], imm5[4..1], 0b0;
+};
+
+format JType[32] : Inst32Format {
+  fields:
+    unsigned imm20[20];
+    unsigned rd[5];
+    unsigned opcode[7];
+  overlays:
+    signed j_imm[21] = imm20[19, 7..0, 8, 18..9], 0b0;
+};
+// End of Exercise 4 formats.
+
+// Exercise 5 format.
+format SType[32] : Inst32Format {
+  fields:
+    unsigned imm7[7];
+    unsigned rs2[5];
+    unsigned rs1[5];
+    unsigned func3[3];
+    unsigned imm5[5];
+    unsigned opcode[7];
+  overlays:
+    signed s_imm[12] = imm7, imm5;
+};
+// End of Exercise 5 format.
+
+// There is no Exercise 6 format.
+
+// RiscV instruction format used by fence instructions.
+format Fence[32] : Inst32Format {
+  fields:
+    unsigned fm[4];
+    unsigned pred[4];
+    unsigned succ[4];
+    unsigned rs1[5];
+    unsigned func3[3];
+    unsigned rd[5];
+    unsigned opcode[7];
+};
+
+// This defines the RiscVInst32 instruction group which defines the encoding
+// of the RiscV instructions we care about.
+instruction group RiscVInst32[32] : Inst32Format {
+  // Exercise 2 instructions.
+  add     : RType  : func7 == 0b000'0000, func3 == 0b000, opcode == 0b011'0011;
+  and     : RType  : func7 == 0b000'0000, func3 == 0b111, opcode == 0b011'0011;
+  or      : RType  : func7 == 0b000'0000, func3 == 0b110, opcode == 0b011'0011;
+  sll     : RType  : func7 == 0b000'0000, func3 == 0b001, opcode == 0b011'0011;
+  sltu    : RType  : func7 == 0b000'0000, func3 == 0b011, opcode == 0b011'0011;
+  sub     : RType  : func7 == 0b010'0000, func3 == 0b000, opcode == 0b011'0011;
+  xor     : RType  : func7 == 0b000'0000, func3 == 0b100, opcode == 0b011'0011;
+  // End Exercise 2 instructions.
+
+  // Exercise 3 instructions.
+  addi    : IType : func3 == 0b000, opcode == 0b001'0011;
+  andi    : IType : func3 == 0b111, opcode == 0b001'0011;
+  ori     : IType : func3 == 0b110, opcode == 0b001'0011;
+  xori    : IType : func3 == 0b100, opcode == 0b001'0011;
+
+  slli    : RType : func7 == 0b000'0000, func3 == 0b001, opcode == 0b001'0011;
+  srai    : RType : func7 == 0b010'0000, func3 == 0b101, opcode == 0b001'0011;
+  srli    : RType : func7 == 0b000'0000, func3 == 0b101, opcode == 0b001'0011;
+
+  auipc   : UType : opcode == 0b001'0111;
+  lui     : UType : opcode == 0b011'0111;
+  // End Exercise 3 instructions.
+
+  // Exercise 4 instructions.
+  beq     : BType : opcode == 0b110'0011, func3 == 0b000;
+  bge     : BType : opcode == 0b110'0011, func3 == 0b101;
+  bgeu    : BType : opcode == 0b110'0011, func3 == 0b111;
+  blt     : BType : opcode == 0b110'0011, func3 == 0b100;
+  bltu    : BType : opcode == 0b110'0011, func3 == 0b110;
+  bne     : BType : opcode == 0b110'0011, func3 == 0b001;
+
+  jal     : JType : opcode == 0b110'1111;
+
+  jalr    : IType : opcode == 0b110'0111, func3 == 0b000;
+  // End of Exercise 4 instructions.
+
+  // Exercise 5 instructions.
+  sb      : SType : opcode == 0b010'0011, func3 == 0b000;
+  sh      : SType : opcode == 0b010'0011, func3 == 0b001;
+  sw      : SType : opcode == 0b010'0011, func3 == 0b010;
+  // End of Exercise 5 instructions.
+
+  // Exercise 6 instructions.
+  lb      : IType : opcode == 0b000'0011, func3 == 0b000;
+  lbu     : IType : opcode == 0b000'0011, func3 == 0b100;
+  lh      : IType : opcode == 0b000'0011, func3 == 0b001;
+  lhu     : IType : opcode == 0b000'0011, func3 == 0b101;
+  lw      : IType : opcode == 0b000'0011, func3 == 0b010;
+  // End of Exercise 6 instructions.
+
+  fence   : Fence  : func3 == 0b000, opcode == 0b000'1111;
+  ebreak  : Inst32Format : bits == 0b0000'0000'0001'00000'000'00000, opcode == 0b111'0011;
+  csrs    : IType  : func3 == 0b010, rs1 != 0, opcode == 0b111'0011;
+  csrw_nr : IType  : func3 == 0b001, rd == 0,  opcode == 0b111'0011;
+  csrs_nw : IType  : func3 == 0b010, rs1 == 0, opcode == 0b111'0011;
+};

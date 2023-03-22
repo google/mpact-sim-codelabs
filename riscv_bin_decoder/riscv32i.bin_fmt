@@ -1,0 +1,82 @@
+// This declares the decoder.
+decoder RiscV32I {
+  // The namespace in which code will be generated.
+  namespace mpact::sim::codelab;
+  // The name (including any namespace qualifiers) of the opcode enum type.
+  opcode_enum = "OpcodeEnum";
+  // Include files specific to this decoder.
+  includes {
+    #include "riscv_isa_decoder/solution/riscv32i_decoder.h"
+  }
+  // Instruction groups for which to generate decode functions.
+  RiscVInst32;
+};
+
+// The generic RiscV 32 bit instruction format.
+format Inst32Format[32] {
+  fields:
+    unsigned bits[25];
+    unsigned opcode[7];
+};
+
+// Exercise 2 format.
+// End of Exercise 2 format.
+
+// RiscV 32 bit instruction format used by a number of instructions
+// needing a 12 bit immediate, including CSR instructions.
+format IType[32] : Inst32Format {
+  fields:
+    signed imm12[12];
+    unsigned rs1[5];
+    unsigned func3[3];
+    unsigned rd[5];
+    unsigned opcode[7];
+};
+
+// Exercise 3 format.
+// End of Exercise 3 format.
+
+// Exercise 4 formats.
+// End of Exercise 4 formats.
+
+// Exercise 5 format.
+// End of Exercise 5 format.
+
+// Exercise 6 format.
+// End of Exercise 6 format.
+
+// RiscV instruction format used by fence instructions.
+format Fence[32] : Inst32Format {
+  fields:
+    unsigned fm[4];
+    unsigned pred[4];
+    unsigned succ[4];
+    unsigned rs1[5];
+    unsigned func3[3];
+    unsigned rd[5];
+    unsigned opcode[7];
+};
+
+// This defines the RiscVInst32 instruction group which defines the encoding
+// of the RiscV instructions we care about.
+instruction group RiscVInst32[32] : Inst32Format {
+  // Exercise 2 instructions.
+  // End Exercise 2 instructions.
+
+  // Exercise 3 instructions.
+  // End of Exercise 3 instructions.
+
+  // Exercise 4 instructions.
+  // End of Exercise 4 instructions.
+
+  // Exercise 5 instructions.
+  // End of Exercise 5 instructions.
+
+  // Exercise 6 instructions.
+  // End of Exercise 6 instructions.
+
+  fence   : Fence  : func3 == 0b000, opcode == 0b000'1111;
+  csrs    : IType  : func3 == 0b010, rs1 != 0, opcode == 0b111'0011;
+  csrw_nr : IType  : func3 == 0b001, rd == 0,  opcode == 0b111'0011;
+  csrs_nw : IType  : func3 == 0b010, rs1 == 0, opcode == 0b111'0011;
+};

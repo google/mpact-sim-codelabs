@@ -1,0 +1,81 @@
+// This file is used for the go/mpact-sim-codelabs/instruction-decoder
+// codelab. It will contain instruction decode information for a subset
+// of the RiscV32I architecture.
+
+isa RiscV32I {
+  namespace mpact::sim::codelab;
+  slots { riscv32; }
+}
+
+// The RiscV 'I' instructions.
+slot riscv32i {
+  // Include file that contains the declarations of the semantic functions for
+  // the 'I' instructions.
+  includes {
+    #include "riscv_semantic_functions/rv32i_instructions.h"
+  }
+  // These are all 32 bit instructions, so set default size to 4.
+  default size = 4;
+  // Model these with 0 latency to avoid buffering the result. Since RiscV
+  // instructions have sequential semantics this is fine.
+  default latency = 0;
+  // The opcodes.
+  opcodes {
+
+    // Add the instruction definition for the instructions in the codelab
+    // at the place holders below.
+    //
+    // Note Exercise 1 does not involve adding instructions.
+
+    // Exercise 2, Add Register-Register ALU Instructions.
+
+    // Exercise 3, Add ALU Instructions with Immediates.
+
+    // Exercise 4, Add Branch and Jump-And-Link Instructions.
+
+    // Exercise 5, Add Store Instructions.
+
+    // Exercise 6, Add Load Instructions.
+
+    // End of Excercises.
+    fence{: imm12 : },
+      semfunc: "&RV32IFence",
+      disasm: "fence";
+    ebreak{},
+      semfunc: "&RV32IEbreak",
+      disasm: "ebreak";
+  }
+}
+
+// RiscV32 CSR manipulation instructions.
+slot zicsr {
+  // Include file that contains the declarations of the semantic functions for
+  // the 'zicsr' instructions.
+  includes {
+    #include "riscv_semantic_functions/zicsr_instructions.h"
+  }
+  // 32 bit instructions.
+  default size = 4;
+  // No buffering of the result.
+  default latency = 0;
+  // Instructions.
+  opcodes {
+    csrs{: rs1, csr : rd, csr},
+      semfunc: "&RV32ZiCsrs",
+      disasm: "csrs", "%csr, %rs1";
+    csrw_nr{: rs1 : csr},
+      semfunc: "&RV32ZiCsrwNr",  // rd == 0 (x0).
+      disasm: "csrw", "%csr, %rs1";
+    csrs_nw{: csr : rd, csr},
+      semfunc: "&RV32ZiCsrsNw",  // rs1 == 0 (x0).
+      disasm: "csrs", "%csr, %rd";
+  }
+}
+
+// The final instruction set combines riscv32i and zicsr.
+slot riscv32 : riscv32i, zicsr {
+  // Default opcode for any instruction not matched by the decoder.
+  default opcode =
+    disasm: "Illegal instruction at 0x%(@:08x)",
+    semfunc: "&RV32IllegalInstruction";
+}
