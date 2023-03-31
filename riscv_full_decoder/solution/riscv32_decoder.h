@@ -23,7 +23,7 @@
 #include "mpact/sim/generic/decoder_interface.h"
 #include "mpact/sim/generic/instruction.h"
 #include "mpact/sim/util/memory/memory_interface.h"
-#include "riscv/riscv_state.h"
+#include "other/riscv_simple_state.h"
 #include "riscv_full_decoder/solution/riscv32i_encoding.h"
 #include "riscv_isa_decoder/solution/riscv32i_decoder.h"
 

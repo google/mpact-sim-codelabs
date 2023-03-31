@@ -7,6 +7,9 @@ isa RiscV32I {
   slots { riscv32; }
 }
 
+// First disasm fragment is 15 char wide and left justified.
+disasm widths = {-15};
+
 // The RiscV 'I' instructions.
 slot riscv32i {
   // Include file that contains the declarations of the semantic functions for
@@ -25,17 +28,17 @@ slot riscv32i {
     // Add the instruction definition for the instructions in the codelab
     // at the place holders below.
     //
-    // Note Exercise 1 does not involve adding instructions.
+    // Note "Initial Build" does not involve adding instructions.
 
-    // Exercise 2, Add Register-Register ALU Instructions.
+    // Add Register-Register ALU Instructions.
 
-    // Exercise 3, Add ALU Instructions with Immediates.
+    // Add ALU Instructions with Immediates.
 
-    // Exercise 4, Add Branch and Jump-And-Link Instructions.
+    // Add Branch and Jump-And-Link Instructions.
 
-    // Exercise 5, Add Store Instructions.
+    // Add Store Instructions.
 
-    // Exercise 6, Add Load Instructions.
+    // Add Load Instructions.
 
     // End of Excercises.
     fence{: imm12 : },

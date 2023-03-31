@@ -22,7 +22,7 @@
 
 #include "absl/functional/any_invocable.h"
 #include "mpact/sim/generic/operand_interface.h"
-#include "riscv/riscv_state.h"
+#include "other/riscv_simple_state.h"
 #include "riscv_isa_decoder/solution/riscv32i_decoder.h"
 #include "riscv_isa_decoder/solution/riscv32i_enums.h"
 

@@ -20,8 +20,8 @@
 #include "mpact/sim/generic/immediate_operand.h"
 #include "mpact/sim/generic/literal_operand.h"
 #include "mpact/sim/generic/operand_interface.h"
-#include "riscv/riscv_register.h"
-#include "riscv/riscv_state.h"
+#include "other/riscv_register.h"
+#include "other/riscv_simple_state.h"
 #include "riscv_bin_decoder/solution/riscv32i_bin_decoder.h"
 
 namespace mpact {
@@ -39,16 +39,16 @@ using generic::IntLiteralOperand;
 template <typename RegType>
 inline DestinationOperandInterface *GetRegisterDestinationOp(
     RiscVState *state, const std::string &name, int latency) {
-  auto [reg_ptr, unused] = state->GetRegister<RegType>(name);
-  return reg_ptr->CreateDestinationOperand(latency);
+  auto *reg = state->GetRegister<RegType>(name).first;
+  return reg->CreateDestinationOperand(latency);
 }
 
 template <typename RegType>
 inline DestinationOperandInterface *GetRegisterDestinationOp(
     RiscVState *state, const std::string &name, int latency,
     const std::string &op_name) {
-  auto [reg_ptr, unused] = state->GetRegister<RegType>(name);
-  return reg_ptr->CreateDestinationOperand(latency, op_name);
+  auto *reg = state->GetRegister<RegType>(name).first;
+  return reg->CreateDestinationOperand(latency, op_name);
 }
 
 template <typename RegType>

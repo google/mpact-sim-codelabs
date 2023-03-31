@@ -20,6 +20,32 @@ package(
 )
 
 cc_library(
+    name = "riscv_simple_state",
+    srcs = [
+        "riscv_simple_state.cc",
+    ],
+    hdrs = [
+        "riscv_simple_state.h",
+        "riscv_register.h",
+    ],
+    deps = [
+        "@com_google_absl//absl/container:flat_hash_map",
+        "@com_google_absl//absl/functional:any_invocable",
+        "@com_google_absl//absl/log",
+        "@com_google_absl//absl/log:check",
+        "@com_google_absl//absl/status",
+        "@com_google_absl//absl/status:statusor",
+        "@com_google_absl//absl/strings",
+        "@com_google_absl//absl/types:any",
+        "@mpact-sim//mpact/sim/generic:arch_state",
+        "@mpact-sim//mpact/sim/generic:core",
+        "@mpact-sim//mpact/sim/generic:instruction",
+        "@mpact-sim//mpact/sim/generic:type_helpers",
+        "@mpact-sim//mpact/sim/util/memory",
+    ],
+)
+
+cc_library(
     name = "rv32i_top",
     srcs = [
         "rv32i_top.cc",
@@ -28,6 +54,7 @@ cc_library(
         "rv32i_top.h",
     ],
     deps = [
+        ":riscv_simple_state",
         "//riscv_full_decoder/solution:riscv32i_decoder",
         "//riscv_isa_decoder/solution:riscv32i_isa",
         "@com_google_absl//absl/functional:bind_front",
@@ -36,7 +63,6 @@ cc_library(
         "@com_google_absl//absl/strings",
         "@mpact-riscv//riscv:riscv32_htif_semihost",
         "@mpact-riscv//riscv:riscv_breakpoint",
-        "@mpact-riscv//riscv:riscv_state",
         "@mpact-sim//mpact/sim/generic:component",
         "@mpact-sim//mpact/sim/generic:core",
         "@mpact-sim//mpact/sim/generic:core_debug_interface",
@@ -51,7 +77,6 @@ cc_binary(
         "rv32i_sim.cc",
     ],
     copts = ["-O3"],
-    args = ["other/hello_rv32i.elf"],
     data = [
         "hello_rv32i.elf",
     ],
@@ -69,3 +94,4 @@ cc_binary(
         "@mpact-sim//mpact/sim/util/program_loader:elf_loader",
     ],
 )
+

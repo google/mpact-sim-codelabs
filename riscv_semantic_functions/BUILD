@@ -31,7 +31,7 @@ cc_library(
     ],
     copts = ["-O3"],
     deps = [
-        "@mpact-riscv//riscv:riscv_state",
+        "//other:riscv_simple_state",
         "@mpact-sim//mpact/sim/generic:arch_state",
         "@mpact-sim//mpact/sim/generic:core",
         "@mpact-sim//mpact/sim/generic:instruction",

@@ -27,10 +27,10 @@
 #include "mpact/sim/util/memory/flat_demand_memory.h"
 #include "mpact/sim/util/memory/memory_interface.h"
 #include "mpact/sim/util/memory/memory_watcher.h"
+#include "other/riscv_simple_state.h"
 #include "riscv/riscv32_htif_semihost.h"
 #include "riscv/riscv_breakpoint.h"
 #include "riscv/riscv_register.h"
-#include "riscv/riscv_state.h"
 #include "riscv_full_decoder/solution/riscv32_decoder.h"
 #include "riscv_isa_decoder/solution/riscv32i_enums.h"
 

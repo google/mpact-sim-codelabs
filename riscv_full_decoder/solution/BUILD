@@ -30,6 +30,7 @@ cc_library(
         "riscv32i_encoding.h",
     ],
     deps = [
+        "//other:riscv_simple_state",
         "//riscv_bin_decoder/solution:riscv32i_bin_fmt",
         "//riscv_isa_decoder/solution:riscv32i_isa",
         "//riscv_semantic_functions/solution:riscv32i",
@@ -38,7 +39,6 @@ cc_library(
         "@com_google_absl//absl/functional:bind_front",
         "@com_google_absl//absl/memory",
         "@com_google_absl//absl/strings",
-        "@mpact-riscv//riscv:riscv_state",
         "@mpact-sim//mpact/sim/generic:arch_state",
         "@mpact-sim//mpact/sim/generic:core",
         "@mpact-sim//mpact/sim/generic:instruction",

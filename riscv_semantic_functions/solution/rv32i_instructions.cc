@@ -21,7 +21,7 @@
 #include "mpact/sim/generic/arch_state.h"
 #include "mpact/sim/generic/data_buffer.h"
 #include "mpact/sim/generic/instruction_helpers.h"
-#include "riscv/riscv_state.h"
+#include "other/riscv_simple_state.h"
 
 namespace mpact {
 namespace sim {

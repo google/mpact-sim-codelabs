@@ -21,8 +21,8 @@
 #include "mpact/sim/generic/immediate_operand.h"
 #include "mpact/sim/generic/literal_operand.h"
 #include "mpact/sim/generic/operand_interface.h"
-#include "riscv/riscv_register.h"
-#include "riscv/riscv_state.h"
+#include "other/riscv_simple_state.h"
+#include "other/riscv_register.h"
 
 namespace mpact {
 namespace sim {

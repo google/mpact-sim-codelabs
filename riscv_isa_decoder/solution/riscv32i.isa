@@ -5,6 +5,8 @@ isa RiscV32I {
   slots { riscv32; }
 }
 
+disasm widths = {-15};
+
 // The RiscV 'I' instructions.
 slot riscv32i {
   // Include file that contains the declarations of the semantic functions for
