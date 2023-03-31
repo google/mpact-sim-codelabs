@@ -1,6 +1,7 @@
 # MPACT-Sim Codelabs
 
-This repoistory contains the codelab exercises for the MPACT-Sim codelabs.
+This repoistory contains the codelab exercises for the
+[MPACT-Sim codelabs](https://developers.google.com/mpact-sim).
 These codelabs provide a tutorials on how to get started using MPACT-Sim to
 create instruction set simulators.
 
