@@ -14,7 +14,7 @@
 
 workspace(name = "com_google_mpact-sim-codelabs")
 
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file", "http_archive")
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file")
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
 # Additional bazel rules.
@@ -25,38 +25,39 @@ http_archive(
 )
 
 load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
+
 bazel_skylib_workspace()
 
 # Google Absail.
 http_archive(
     name = "com_google_absl",
     sha256 = "3ea49a7d97421b88a8c48a0de16c16048e17725c7ec0f1d3ea2683a2a75adc21",
+    strip_prefix = "abseil-cpp-20230125.0",
     urls = ["https://github.com/abseil/abseil-cpp/archive/refs/tags/20230125.0.tar.gz"],
-    strip_prefix="abseil-cpp-20230125.0",
 )
 
 # Google protobuf.
 http_archive(
     name = "com_google_protobuf",
     sha256 = "4eab9b524aa5913c6fffb20b2a8abf5ef7f95a80bc0701f3a6dbb4c607f73460",
+    strip_prefix = "protobuf-3.21.12",
     urls = ["https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protobuf-cpp-3.21.12.tar.gz"],
-    strip_prefix="protobuf-3.21.12",
 )
 
 # Google re2
 http_archive(
     name = "com_google_re2",
     sha256 = "7a9a4824958586980926a300b4717202485c4b4115ac031822e29aa4ef207e48",
+    strip_prefix = "re2-2023-03-01",
     urls = ["https://github.com/google/re2/archive/refs/tags/2023-03-01.tar.gz"],
-    strip_prefix = "re2-2023-03-01"
 )
 
 # ELFIO header based library.
 http_archive(
-    build_file = "BUILD.elfio",
     name = "com_github_serge1_elfio",
-    strip_prefix = "elfio-3.9",
+    build_file = "@mpact-sim//:external/BUILD.elfio",
     sha256 = "767b269063fc35aba6d361139f830aa91c45dc6b77942f082666876c1aa0be0f",
+    strip_prefix = "elfio-3.9",
     urls = ["https://github.com/serge1/ELFIO/releases/download/Release_3.9/elfio-3.9.tar.gz"],
 )
 
@@ -71,8 +72,8 @@ http_archive(
 # Google test.
 http_archive(
     name = "com_google_googletest",
-    strip_prefix = "googletest-1.13.0",
     sha256 = "ad7fdba11ea011c1d925b3289cf4af2c66a352e18d4c7264392fead75e919363",
+    strip_prefix = "googletest-1.13.0",
     urls = ["https://github.com/google/googletest/archive/refs/tags/v1.13.0.tar.gz"],
 )
 
@@ -87,7 +88,7 @@ filegroup(
 # Antlr4 c++ runtime.
 http_archive(
     name = "org_antlr4_cpp_runtime",
-    build_file = "BUILD.antlr4",
+    build_file = "@mpact-sim//:external/BUILD.antlr4",
     sha256 = "8018c335316e61bb768e5bd4a743a9303070af4e1a8577fa902cd053c17249da",
     urls = ["https://www.antlr.org/download/antlr4-cpp-runtime-4.11.1-source.zip"],
 )
@@ -108,17 +109,19 @@ http_archive(
 )
 
 # MPACT-Sim repo
-git_repository(
+http_archive(
     name = "mpact-sim",
-    branch = "main",
-    remote = "https://mpact.googlesource.com/mpact-sim",
+    sha256 = "8464cf3a56cbd33f73cb83943ce5ce51547cede06278546bdb187cf19fe917b2",
+    strip_prefix = "mpact-sim-0.0.2",
+    url = "https://github.com/google/mpact-sim/archive/refs/tags/0.0.2.tar.gz",
 )
 
 # MPACT-RiscV repo
-git_repository(
+http_archive(
     name = "mpact-riscv",
-    branch = "main",
-    remote = "https://mpact.googlesource.com/mpact-riscv",
+    sha256 = "780d54cb2d3723ab2097fb339d894a29e5e752e2cdb7e4fe65f5ddf39087f68a",
+    strip_prefix = "mpact-riscv-0.0.2",
+    url = "https://github.com/google/mpact-riscv/archive/refs/tags/0.0.2.tar.gz",
 )
 
 # Binding to tool targets in mpact-sim. This is required for the macros
@@ -139,19 +142,21 @@ bind(
 http_archive(
     name = "rules_license",
     sha256 = "6157e1e68378532d0241ecd15d3c45f6e5cfd98fc10846045509fb2a7cc9e381",
-    url = "https://github.com/bazelbuild/rules_license/releases/download/0.0.4/rules_license-0.0.4.tar.gz"
+    url = "https://github.com/bazelbuild/rules_license/releases/download/0.0.4/rules_license-0.0.4.tar.gz",
 )
 
 load("@rules_foreign_cc//foreign_cc:repositories.bzl", "rules_foreign_cc_dependencies")
+
 rules_foreign_cc_dependencies()
 
-load("@rules_proto_grpc//:repositories.bzl", "rules_proto_grpc_toolchains", "rules_proto_grpc_repos")
+load("@rules_proto_grpc//:repositories.bzl", "rules_proto_grpc_repos", "rules_proto_grpc_toolchains")
+
 rules_proto_grpc_toolchains()
+
 rules_proto_grpc_repos()
 
 load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
-rules_proto_dependencies()
-rules_proto_toolchains()
 
-load("@rules_license//:deps.bzl", "rules_license_dependencies")
-rules_license_dependencies()
+rules_proto_dependencies()
+
+rules_proto_toolchains()

@@ -1,7 +1,3 @@
-bazel-bin
-bazel-mpact-sim-codelabs
-bazel-out
-bazel-testlogs
+bazel-*
 external
 .vscode
-.bazelrc
