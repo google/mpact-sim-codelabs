@@ -1,5 +1,5 @@
 {
-  "integrity":  "sha256-ponXK2g2o29Cy4fiRbKbDKIYL3WSNeq1TqR0+xt5Mpc=",
-  "strip_prefix": "mpact-sim-838bc35e36cdf9399a29774df21f08297911dadf",
-  "url": "https://github.com/google/mpact-sim/archive/838bc35e36cdf9399a29774df21f08297911dadf.tar.gz",
+  "url": "https://github.com/google/mpact-sim/archive/b38dc4e3a090ed140efb1446372e5d55fdae34e8.tar.gz",
+  "integrity": "sha256-l6J3FSQK0M1JLp5cdE87Ytbgmn6VcNnosXJtMyaTLd8=",
+  "strip_prefix": "mpact-sim-b38dc4e3a090ed140efb1446372e5d55fdae34e8"
 }
