@@ -1,0 +1,12 @@
+{
+  "versions": [
+    "1.0.0"
+  ],
+  "maintainers": [
+    {
+      "email": "mpact-dev-team@google.com",
+      "name": "MPACT Dev Team"
+    }
+  ],
+  "homepage": "https://github.com/google/mpact-riscv"
+}
